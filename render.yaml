@@ -4,7 +4,7 @@ services:
     runtime: python
     pythonVersion: 3.11
     rootDir: backend-fastapi
-    buildCommand: pip install uv && uv pip install --system -r requirements.txt
+    buildCommand: pip install uv && uv pip install -r requirements.txt
     startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --loop asyncio
     envVars:
       - key: SECRET_KEY
