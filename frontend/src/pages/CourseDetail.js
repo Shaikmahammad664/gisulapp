@@ -23,12 +23,14 @@ export default function CourseDetail() {
 
   useEffect(() => {
     fetchCourse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
     if (user && enrolled) {
       fetchProgress();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enrolled, user]);
 
   const fetchCourse = async () => {

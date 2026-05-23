@@ -31,6 +31,7 @@ export default function CourseForm() {
         .catch(() => setError('Course not found'))
         .finally(() => setFetching(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleSubmit = async (e) => {
