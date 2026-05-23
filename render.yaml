@@ -5,7 +5,7 @@ services:
     pythonVersion: 3.11
     rootDir: backend-fastapi
     buildCommand: pip install uv && uv pip install --system -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --loop asyncio
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --loop asyncio
     envVars:
       - key: SECRET_KEY
         value: change-this-to-a-strong-secret-key-12345
