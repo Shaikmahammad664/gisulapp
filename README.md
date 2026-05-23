@@ -4,80 +4,209 @@ A fullstack course management platform where admins create and manage courses, a
 
 ---
 
+## 🚀 Deployment
+
+### Production Deployment: Vercel (Frontend) + Render (Backend)
+
+**Start here:** [VERCEL_RENDER_DEPLOYMENT.md](VERCEL_RENDER_DEPLOYMENT.md)
+
+- **Frontend:** Deployed on Vercel (`*.vercel.app`)
+- **Backend:** Deployed on Render (`*.onrender.com`)
+- **Database:** SQLite (auto-seeded with demo data)
+- **Auto-Deploy:** Push to GitHub, both services redeploy automatically
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 18, React Router v6, Axios |
-| Backend | Node.js, Express.js |
-| Database | SQLite via sql.js (file-based, zero config) |
-| Auth | JWT (jsonwebtoken + bcryptjs) |
-| Styling | Custom CSS with CSS Variables (dark theme) |
+| Frontend | React 19, React Router v7, Axios, CSS Variables |
+| Backend | Python, FastAPI, Uvicorn |
+| Database | SQLite (file-based) |
+| ORM | SQLAlchemy 2.0 |
+| Auth | JWT + bcrypt |
+| Deployment | Vercel + Render |
 
 ---
 
-## Features
+## ✨ Features
 
-### Core
-- **Authentication** — Register & login for Admin and Student roles. JWT-based, protected routes redirect unauthenticated users.
-- **Course Management (Admin)** — Create, edit, and delete courses with title, description, category, thumbnail URL, and lessons.
-- **Course Catalog (Student)** — Browse all courses, view full course detail page with lesson list.
-- **Enrollment** — Students enroll in courses with one click. Student dashboard shows all enrolled courses.
+### Core Features
+- **Authentication** — Register & login for Admin and Student roles using JWT + bcrypt
+- **Course Management (Admin)** — Create, edit, delete courses with title, description, category, thumbnail, and lessons
+- **Course Catalog (Student)** — Browse courses, full detail pages with all lessons
+- **Enrollment** — Students enroll in courses with one click, view enrolled courses on dashboard
+- **Search & Filter** — Search courses by title, filter by category
 
-### Bonus
-- **Progress Tracking** — Students mark lessons as complete/incomplete. Progress bar on dashboard per course.
-- **Search & Filter** — Search by title and filter by category (server-side).
+### Additional Features
+- **Role-Based Access Control** — Admin-only routes, student-only actions
+- **Protected Routes** — Frontend and backend validation
+- **Dark Theme** — Custom CSS with CSS Variables
+- **Auto-Seeding** — Demo data loads on first run
+- **CORS Enabled** — Frontend and backend communication
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 gisul-platform/
-├── backend/
-│   ├── routes/
-│   │   ├── auth.js          # Register, login, /me
-│   │   ├── courses.js       # CRUD for courses, search/filter
-│   │   └── enrollments.js   # Enroll, progress, lesson completions
-│   ├── db.js                # SQLite database setup (sql.js)
-│   ├── middleware.js        # JWT auth middleware
-│   ├── seed.js              # Demo data seeder
-│   ├── server.js            # Express app entry point
-│   └── .env.example
-├── frontend/
+├── frontend/                   # React application
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.js
-│   │   │   └── CourseCard.js
-│   │   ├── context/
-│   │   │   └── AuthContext.js
-│   │   ├── pages/
-│   │   │   ├── Login.js
-│   │   │   ├── Register.js
-│   │   │   ├── Catalog.js
-│   │   │   ├── CourseDetail.js
-│   │   │   ├── AdminDashboard.js
-│   │   │   ├── StudentDashboard.js
-│   │   │   └── CourseForm.js
-│   │   ├── utils/
-│   │   │   └── api.js       # Axios instance with interceptors
-│   │   ├── App.js
-│   │   └── App.css
-│   └── .env.example
+│   │   ├── components/        # Navbar, CourseCard
+│   │   ├── pages/             # Login, Register, Catalog, Dashboards
+│   │   ├── context/           # AuthContext
+│   │   ├── utils/             # api.js (Axios with interceptors)
+│   │   └── App.js
+│   ├── vercel.json
+│   └── .env.production        # Backend URL for production
+│
+├── backend-fastapi/           # FastAPI backend
+│   ├── app/
+│   │   ├── models.py          # User, Course, Lesson, Enrollment
+│   │   ├── schemas.py         # Pydantic models
+│   │   ├── auth.py            # JWT + bcrypt functions
+│   │   ├── database.py        # SQLAlchemy setup
+│   │   ├── seed.py            # Demo data
+│   │   └── routes/            # API endpoints
+│   ├── main.py
+│   └── requirements.txt
+│
+├── render.yaml                # Render backend deployment
+├── vercel.json                # Vercel frontend deployment
+├── VERCEL_RENDER_DEPLOYMENT.md # Deployment guide
 └── README.md
 ```
 
 ---
 
-## Local Setup
+## 🏃 Local Development
 
 ### Prerequisites
-- Node.js v16+ and npm
+- Python 3.11+
+- Node.js 16+
+- Git
 
-### 1. Clone the repository
-
+### Backend Setup
 ```bash
-git clone https://github.com/YOUR_USERNAME/gisul-platform.git
+cd backend-fastapi
+pip install -r requirements.txt
+python main.py
+# Backend runs on http://localhost:5000
+# API docs at http://localhost:5000/docs
+```
+
+### Frontend Setup
+```bash
+cd frontend
+npm install
+npm start
+# Frontend runs on http://localhost:3000
+# Uses backend at http://localhost:5000
+```
+
+---
+
+## 🔑 Demo Credentials
+
+```
+ADMIN
+Email:    admin@gisul.com
+Password: admin123
+
+STUDENT
+Email:    student@gisul.com
+Password: student123
+```
+
+---
+
+## 📚 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` — Create new account
+- `POST /api/auth/login` — Get JWT token
+- `GET /api/auth/me` — Get current user
+
+### Courses
+- `GET /api/courses/` — List all courses (search/filter)
+- `GET /api/courses/{id}` — Get course details with lessons
+- `POST /api/courses/` — Create course (admin only)
+- `PUT /api/courses/{id}` — Update course (admin only)
+- `DELETE /api/courses/{id}` — Delete course (admin only)
+
+### Enrollments
+- `GET /api/enrollments/my` — Get student's enrolled courses
+- `POST /api/enrollments/` — Enroll in a course
+- `DELETE /api/enrollments/{id}` — Unenroll from course
+
+---
+
+## 🌍 Deployment Instructions
+
+### Option 1: Vercel + Render (Recommended)
+**→ [See Full Guide](VERCEL_RENDER_DEPLOYMENT.md)**
+
+**Part 1:** Deploy backend on Render (10 min)
+**Part 2:** Deploy frontend on Vercel (5 min)
+**Total:** ~20 minutes, fully automated after that
+
+### Quick Summary:
+1. Push code to GitHub
+2. Go to render.com → Create web service → Select repo → Deploy ✅
+3. Go to vercel.com → Import project → Add Render URL → Deploy ✅
+4. Both services auto-redeploy on every GitHub push
+
+---
+
+## 🔧 Environment Variables
+
+### Frontend (.env.production)
+```
+REACT_APP_API_URL=https://your-render-backend.onrender.com
+```
+
+### Backend (Render Settings)
+```
+SQLALCHEMY_DATABASE_URL=sqlite:///./gisul.db
+SECRET_KEY=your-secret-key-here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=10080
+PORT=8000
+```
+
+---
+
+## 📝 API Documentation
+
+Once deployed, visit:
+- `https://your-backend.onrender.com/docs` — Swagger UI with all endpoints
+- `https://your-backend.onrender.com/redoc` — ReDoc alternative
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m "Add feature"`
+4. Push to branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+MIT License - feel free to use for your projects!
+
+---
+
+## 🙋 Support
+
+- **Issue:** Open a GitHub issue
+- **Question:** Check [VERCEL_RENDER_DEPLOYMENT.md](VERCEL_RENDER_DEPLOYMENT.md) for help
+- **Docs:** FastAPI - https://fastapi.tiangolo.com/ | React - https://react.dev/
 cd gisul-platform
 ```
 
